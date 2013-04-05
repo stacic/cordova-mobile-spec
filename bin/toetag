@@ -34,20 +34,9 @@ defaultpath="../autotest/tests/"
 # regex for id'ing a spec
 specreg="it(\".*"
 # regex for id'ing a tagged spec
-tagged="SPEC-1234"
-
+tagged="spec.[0-9]{1,}?"
+# default suite name
 suitename="SUITE"
-
-#greptests=$(grep  --include=*.js $specreg ../autotest/tests/device.tests.js)
-
-#$grepuntagged=$(grep -o $tagged $greptests)
-
-#totag=$(grep  --include=*.js $specreg ../autotest/tests/device.tests.js | grep -v $tagged) #|  sed -i "" s/it(\".*/it(\"SUITE-SPEC.*/
-#echo $totag | sed s/it\(\"/it\(\"SUITE-SPEC\ / ../autotest/tests/device.tests.js
-
-
-# read all entries in default_path
-read -a targets <<< $(ls $defaultpath)
 
 toetagtargets() {
     for file in ${targets[@]}
@@ -55,9 +44,41 @@ toetagtargets() {
         echo toetagging $file
         suitename $file
         echo Suite Name: $suitename
-        #found=$(grep -c $specreg $defaultpath$file)
-        #echo found $found specs to toetag
-        #totag=$(
+        found=$(grep -c $specreg $defaultpath$file)
+        foundtagged=$(grep -c $tagged $defaultpath$file)
+        echo found $found specs to toetag
+        echo found $foundtagged specs already tagged
+        tagcode=0
+        declare -i tagcode
+#        totag=$(grep --include=*.js $specreg ../autotest/tests/device.tests.js | grep -v $tagged)
+#        cat $file | sed s/it\(\"/it\(\"$suitename.spec.$tagcode\ / $defaultpath$file 
+        temp=$IFS
+        IFS="
+"
+        for line in $(cat $defaultpath$file)
+        do
+#            if [[ "$(grep -c $tagged $line)" -eq "1" ]]
+#            then
+#               echo aosehusaehou 
+#            fi
+            #echo $line
+            isTag=$(echo $line | grep -c $tagged)
+            canTag=$(echo $line | grep -c $specreg)
+
+            if [[ $canTag -eq '1' && $isTagged -ne '1' ]]
+            then
+                tagcode=$tagcode+1
+                echo $line | sed s/it\(\"/it\(\"$suitename.spec.$tagcode\ /
+            fi
+
+            # guy=$(grep -c $tagged $line)
+            #echo $tagcode
+            #echo $line | sed s/it\(\"/it\(\"$suitename.spec.$tagcode\ /
+        done
+        echo 
+        IFS=$temp
+        echo 
+	    echo
     done
 }
 
@@ -68,6 +89,8 @@ suitename() {
     IFS=$temp
 }
 
+# read all entries in default_path
+read -a targets <<< $(ls $defaultpath)
 
 toetagtargets
 #echo ${#targets[*]}
