@@ -1,0 +1,73 @@
+##
+ #
+ # Licensed to the Apache Software Foundation (ASF) under one
+ # or more contributor license agreements.  See the NOTICE file
+ # distributed with this work for additional information
+ # regarding copyright ownership.  The ASF licenses this file
+ # to you under the Apache License, Version 2.0 (the
+ # "License"); you may not use this file except in compliance
+ # with the License.  You may obtain a copy of the License at
+ #
+ #   http://www.apache.org/licenses/LICENSE-2.0
+ #
+ # Unless required by applicable law or agreed to in writing,
+ # software distributed under the License is distributed on an
+ # "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ # KIND, either express or implied.  See the License for the
+ # specific language governing permissions and limitations
+ # under the License.
+ #
+##
+
+
+##
+ #
+ #
+ #
+##
+
+defaultpath="../autotest/tests/"
+
+##
+ # regex
+##
+# regex for id'ing a spec
+specreg="it(\".*"
+# regex for id'ing a tagged spec
+tagged="SPEC-1234"
+
+suitename="SUITE"
+
+#greptests=$(grep  --include=*.js $specreg ../autotest/tests/device.tests.js)
+
+#$grepuntagged=$(grep -o $tagged $greptests)
+
+#totag=$(grep  --include=*.js $specreg ../autotest/tests/device.tests.js | grep -v $tagged) #|  sed -i "" s/it(\".*/it(\"SUITE-SPEC.*/
+#echo $totag | sed s/it\(\"/it\(\"SUITE-SPEC\ / ../autotest/tests/device.tests.js
+
+
+# read all entries in default_path
+read -a targets <<< $(ls $defaultpath)
+
+toetagtargets() {
+    for file in ${targets[@]}
+    do
+        echo toetagging $file
+        suitename $file
+        echo Suite Name: $suitename
+        #found=$(grep -c $specreg $defaultpath$file)
+        #echo found $found specs to toetag
+        #totag=$(
+    done
+}
+
+suitename() {
+    temp=$IFS
+    IFS='.'
+    read -ra suitename <<< "$1"
+    IFS=$temp
+}
+
+
+toetagtargets
+#echo ${#targets[*]}
