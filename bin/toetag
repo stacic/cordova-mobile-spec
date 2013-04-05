@@ -55,21 +55,15 @@ toetagtargets() {
         temp=$IFS
         IFS="
 "
-        for line in $(cat $defaultpath$file)
+        totag=$(grep $specreg $defaultpath$file | grep -v $tagged)
+        echo $totag
+        for line in $totag
         do
-#            if [[ "$(grep -c $tagged $line)" -eq "1" ]]
-#            then
-#               echo aosehusaehou 
-#            fi
-            #echo $line
-            isTag=$(echo $line | grep -c $tagged)
-            canTag=$(echo $line | grep -c $specreg)
-
-            if [[ $canTag -eq '1' && $isTagged -ne '1' ]]
-            then
-                tagcode=$tagcode+1
-                echo $line | sed s/it\(\"/it\(\"$suitename.spec.$tagcode\ /
-            fi
+            tagcode=$tagcode+1
+            modline=$(echo $line | sed s/it\(\"/it\(\"$suitename.spec.$tagcode\ /)
+            sed -i '.bck' s/$line/$modline/g $defaultpath$file
+            echo $modline
+          #  echo $line | sed s/$line/it\(\"$suitename.spec.$tagcode\ /
 
             # guy=$(grep -c $tagged $line)
             #echo $tagcode
