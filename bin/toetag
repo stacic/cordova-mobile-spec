@@ -34,7 +34,7 @@ defaultpath="../autotest/tests/"
 # regex for id'ing a spec
 specreg="it(\".*"
 # regex for id'ing a tagged spec
-tagged="spec.[0-9]{1,}?"
+tagged=".*spec\.[0-9]{1,}?"
 # default suite name
 suitename="SUITE"
 
@@ -57,18 +57,18 @@ toetagtargets() {
 "
         totag=$(grep $specreg $defaultpath$file | grep -v $tagged)
         echo $totag
-        for line in $totag
-        do
-            tagcode=$tagcode+1
-            modline=$(echo $line | sed s/it\(\"/it\(\"$suitename.spec.$tagcode\ /)
-            sed -i '.bck' s/$line/$modline/g $defaultpath$file
-            echo $modline
+#        for line in $totag
+#        do
+#            tagcode=$tagcode+1
+#            modline=$(echo $line | sed s/it\(\"/it\(\"$suitename.spec.$tagcode\ /)
+#            sed -i '.bck' s/$line/$modline/g $defaultpath$file
+#            echo $modline
           #  echo $line | sed s/$line/it\(\"$suitename.spec.$tagcode\ /
 
             # guy=$(grep -c $tagged $line)
             #echo $tagcode
             #echo $line | sed s/it\(\"/it\(\"$suitename.spec.$tagcode\ /
-        done
+#        done
         echo 
         IFS=$temp
         echo 
