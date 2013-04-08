@@ -80,5 +80,4 @@ suitename() {
 
 # read all entries in default_path
 read -a targets <<< $(ls $defaultpath)
-targets=(accelerometer.tests.js)
 toetagtargets
