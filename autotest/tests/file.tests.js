@@ -3023,7 +3023,7 @@ describe('File API', function() {
             });
         }
 
-        function arrayBufferEqualsString(buf, str) {
+        function arrayBufferEqualsString(ab, str) {
             var buf = new Uint8Array(ab);
             var match = buf.length == str.length;
 
