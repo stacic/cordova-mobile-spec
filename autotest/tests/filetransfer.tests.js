@@ -199,7 +199,11 @@ describe('FileTransfer', function() {
             var lastProgressEvent = null;
 
             if (!/^file/.exec(remoteFile) && cordova.platformId !== 'blackberry10') {
-                expect(remoteFile).toMatch(/^file:/);
+                if (cordova.platformId === 'windowsphone') {
+                    expect(remoteFile).toMatch(/^x-wmapp0:/);
+                } else {
+                    expect(remoteFile).toMatch(/^file:/);
+                }
                 return;
             }
 
